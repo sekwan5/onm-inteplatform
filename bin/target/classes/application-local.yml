@@ -1,0 +1,25 @@
+####################
+### local 
+####################
+
+server:
+  port: 9800
+
+
+#appinfo
+app-info: 
+  build:
+    version: '0.0.1-SNAPSHOT'
+    timestamp: '@app.build.timestamp@'
+    
+#actuator
+management: 
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    health:
+      show-details: always

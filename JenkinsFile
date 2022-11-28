@@ -1,0 +1,34 @@
+pipeline { 
+    environment { 
+        repository = "kkswde125/onm-ba"  //docker hub id와 repository 이름
+        DOCKERHUB_CREDENTIALS = credentials('ImageRegistry-credential') // jenkins에 등록해 놓은 docker hub credentials 이름
+        dockerImage = '' 
+  }
+  agent any 
+  stages {
+      stage('Building our image') { 
+          steps { 
+              script {
+                  sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin' // docker hub 로그인
+                  sh "chmod 755 mvnw"
+                  sh "./mvnw clean package -DskipTests"
+                  sh "cd skaffold"
+                  sh "skaffold build -p dev -t ${buildVersion}" 
+                  dockerImage = docker.build repository + ":${buildVersion}" 
+              }
+          } 
+      }
+      stage('Deploy our image') { 
+          steps { 
+              script {
+                sh 'docker push $repository:${buildVersion}' //docker push
+              } 
+          }
+      } 
+      stage('Cleaning up') { 
+		  steps { 
+              sh "docker rmi $repository:${buildVersion}" // docker image 제거
+          }
+      } 
+  }
+    }

@@ -1,0 +1,62 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sk.signet.onm.mapper.test.TestMapper">
+
+	<select id="selecTestList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
+			 SELECT 
+			   A.cpId AS id
+     		 , A.serviceCompanyNm
+             , (SELECT areaNm FROM TCO_AREA WHERE areaCd = CS.zone GROUP BY areaCd) AS zone
+     		 , (SELECT areaDtlNm FROM TCO_AREA WHERE areaDtlCd = CS.city) AS city
+     		 , A.csNm
+     		 , CS.csId
+     		 , A.cpId2
+     		 , A.cpNm
+     		 , '' AS chargeMethod
+     		 , A.manufacturerNm
+             , M.chargeSpeedType
+     		 , CASE WHEN CPSTA.connectionYN = 'Y' THEN '연결' ELSE '미연결' END AS lastStatus
+     		 , A.modelNm
+     		 , A.firmwareVersion
+     		 , CPSTA.localListVersion				
+     		 , DATE_FORMAT(A.cpInstalledDate, '%Y-%m-%d') AS cpInstalledDate
+     		 , DATE_FORMAT(CPCONNSTAUS.provisioningDate, '%Y-%m-%d %H:%i:%s') AS 
+             statusChgDate
+     		 , DATE_FORMAT(CPFW.lastUpgradeDate, '%Y-%m-%d %H:%i:%s') AS fwLastUpgradeDate
+     		 , '상세조회' AS custAuthStatus
+     		 , '상세조회' AS commLog
+     		 , '상세조회' AS errorCode
+     		 , '상세조회' AS vocStatus
+			 , DATE_FORMAT(CPSTA.provisioningDate, '%Y-%m-%d %H:%i:%s') AS provisioningDate	     
+			 , A.modelId
+			 , A.chargeBoxSerialNumber
+			 , (SELECT typeNm FROM VINF_CP_CONNECTOR_INFO WHERE csId = CPSTA.csId AND cpId = CPSTA.cpId AND modelId = CPSTA.modelId LIMIT 1) AS connectorInfo
+             FROM VINF_CP_INFO A
+		 INNER JOIN TINF_CPMODEL M
+			ON A.modelId = M.id
+  	     INNER JOIN TINF_CP_FW CPFW
+		    ON A.cpId = CPFW.cpId
+		   AND A.modelId = CPFW.modelId
+  	      LEFT OUTER JOIN TINF_CS CS
+  	        ON A.csId = CS.id  	        
+  	      LEFT OUTER JOIN TINF_CP_STATUS CPSTA
+		    ON A.modelId = CPSTA.modelId
+		   AND A.cpId = CPSTA.cpId
+		   AND A.csId = CPSTA.csId
+		  LEFT OUTER JOIN (
+        		SELECT  csId, cpId, modelId, max(ts) AS provisioningDate 
+        		  FROM  TINF_CP_CONNECTOR_STATUS 
+        		 GROUP  BY csId, cpId, modelId
+           ) CPCONNSTAUS
+        	ON A.modelId = CPCONNSTAUS.modelId
+		   AND A.cpId = CPCONNSTAUS.cpId
+		   AND A.csId = CPCONNSTAUS.csId
+           ORDER BY CPSTA.connectionYN = 'Y' DESC
+           limit 100;
+           
+
+	</select>
+	
+	
+	
+</mapper>

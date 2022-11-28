@@ -1,0 +1,32 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sk.signet.onm.mapper.user.UserMapper">
+
+	<select id="selectUser" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
+		SELECT * FROM TCO_USER
+		WHERE userId = #{userId}
+	</select>
+	
+	
+	<select id="selectUser2" parameterType="map" resultType="com.sk.signet.onm.web.user.domain.User">
+		SELECT * FROM TCO_USER
+		WHERE userId = #{userId}
+	</select>
+	
+	
+	
+	<select id="selectUserList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
+		SELECT * FROM TCO_USER LIMIT 100
+	</select>
+	
+	<update id="updateUser" parameterType="map" >
+		UPDATE TCO_USER 
+			<set>
+				<if test="userNm != null">userNm = #{userNm}, </if>
+				<if test="email != null">email = #{email}, </if>
+			</set>
+			<where>
+				userId = #{userId}
+			</where>
+	</update>
+</mapper>
