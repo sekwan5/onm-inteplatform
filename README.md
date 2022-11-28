@@ -1,4 +1,4 @@
-# onm-ba
+# onm-inteplatform
 SK Signet O&amp;M Backend API System
 
 # Local 환경 사전 요구사항
