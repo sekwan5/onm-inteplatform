@@ -47,7 +47,7 @@ public class CpoController {
         data.put("data", result);
 
         log.debug("data:" + data);
-        System.out.println(new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK));
+
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
     }
 

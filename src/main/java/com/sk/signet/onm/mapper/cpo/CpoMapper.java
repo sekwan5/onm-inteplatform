@@ -10,7 +10,7 @@ import org.mybatis.spring.annotation.MapperScan;
 @SuppressWarnings("rawtypes")
 public interface CpoMapper {
     // CPO 리스트 조회(그리드)
-    List<Map<String, Object>> selectCpoList(Map param, RowBounds rowBounds);
+    List<Map<String, String>> selectCpoList(Map param, RowBounds rowBounds);
 
     // CPO 리스트 목록 total 갯수
     int selectCpoListCount(Map param);
