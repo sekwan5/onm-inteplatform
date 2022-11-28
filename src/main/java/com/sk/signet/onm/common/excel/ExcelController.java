@@ -52,6 +52,9 @@ import com.sk.signet.onm.common.utils.MessageUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 수정예정
+ */
 @RestController
 @RequestMapping("/code")
 @RequiredArgsConstructor
