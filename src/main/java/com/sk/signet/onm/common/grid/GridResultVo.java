@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @SuppressWarnings({ "rawtypes" })
-public class GridResultVo {
+public class GridResultVO {
 
     private int total = 1; // 총 페이지 갯수
     private int page = 1; // 현재 페이지

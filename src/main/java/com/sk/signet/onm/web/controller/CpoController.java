@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sk.signet.onm.common.grid.GridResultVo;
+import com.sk.signet.onm.common.grid.GridResultVO;
 import com.sk.signet.onm.web.service.CpoService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +42,7 @@ public class CpoController {
          * }
          */
 
-        GridResultVo result = cpoService.selectCpoList(param);
+        GridResultVO result = cpoService.selectCpoList(param);
         Map<String, Object> data = new HashMap<>();
         data.put("data", result);
 
@@ -79,24 +79,31 @@ public class CpoController {
     @Operation(summary = "플랫폼 고객사(CPO) 수정 ", description = "플랫폼 고객사(CPO) 수정")
     public ResponseEntity<Map<String, Object>> updateCpo(@RequestBody Map<String, Object> param) {
 
-        int result = cpoService.updateCpo(param);
+        Map<String, Object> apply = cpoService.applyUpdateCode(param);
+
         Map<String, Object> data = new HashMap<>();
-        data.put("data", result);
+        if (apply != null) {
+
+            int result = cpoService.updateCpo(param);
+            data.put("data", result);
+        } else {
+            data.put("data", "fail");
+        }
 
         log.debug("data:" + data);
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
     }
 
-    @PostMapping("/removeMasking")
-    @Operation(summary = "개인정보 마스킹제거 요청 ", description = "개인정보 마스킹제거 요청")
-    public ResponseEntity<Map<String, Object>> removeMasking(@RequestBody Map<String, Object> param) {
+    @PostMapping("/apllyUpdateCode")
+    @Operation(summary = "공통코드 수정 확인 ", description = "공통코드 수정 확인")
+    public ResponseEntity<Map<String, Object>> apllyUpdateCode(@RequestBody Map<String, Object> param) {
 
-        Map<String, Object> result = cpoService.removeMasking(param);
+        Map<String, Object> result = cpoService.applyUpdateCode(param);
 
         Map<String, Object> data = new HashMap<>();
 
         if (result != null) {
-            // 마스킹 제거이력
+
             // cpoService.removeMaskingHist(result);
 
             data.put("data", "success");

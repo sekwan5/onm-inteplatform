@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sk.signet.onm.common.grid.GridResultVo;
+import com.sk.signet.onm.common.grid.GridResultVO;
 import com.sk.signet.onm.mapper.auth.LoginMapper;
 import com.sk.signet.onm.mapper.cpo.CpoMapper;
 
@@ -25,9 +25,9 @@ public class CodeService {
     private LoginMapper loginMapper;
 
     //
-    public GridResultVo selectCpoList(Map<String, Object> param) {
+    public GridResultVO selectCpoList(Map<String, Object> param) {
 
-        GridResultVo result = new GridResultVo();
+        GridResultVO result = new GridResultVO();
 
         if (param.get("page") != null && param.get("rows") != null) {
             result.setPage(Integer.parseInt((String) param.get("page")));
@@ -69,22 +69,6 @@ public class CodeService {
         log.debug("insert result : " + result);
 
         return result;
-    }
-
-    // 마스킹제거요청
-    public Map<String, Object> removeMasking(Map param) {
-
-        Map<String, Object> result = cpoMapper.removeMasking(param);
-
-        return result;
-
-    }
-
-    // 로그인 추적이력생성
-    @Transactional
-    public void removeMaskingHist(Map param) throws Exception {
-
-        loginMapper.insertLoginHist(param);
     }
 
 }

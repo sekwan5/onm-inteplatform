@@ -3,7 +3,7 @@
 <mapper namespace="com.sk.signet.onm.mapper.code.CodeMapper">
 
 
-	<sql id="selectCpoListfrom"></sql>
+	<sql id="applyUpdateCode"></sql>
 
 
 </mapper>
