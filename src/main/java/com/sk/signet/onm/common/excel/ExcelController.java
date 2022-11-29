@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,10 +36,10 @@ import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,7 +62,7 @@ public class ExcelController {
 
     private final int excelDwonLoopCnt = 20000; // 엑셀다운로드시 한번에 조회가능한 건수
 
-    @Resource(name = "excelService")
+    @Autowired
     private ExcelService excelService;
 
     @Autowired
@@ -81,12 +80,26 @@ public class ExcelController {
     public void downloadExcel(@RequestParam Map<String, Object> paramMap, HttpServletResponse res,
             HttpServletRequest req) throws Exception {
 
+        /**
+         * {
+         * excelKey:[
+         * 'csNm'
+         * ,'cpNm'
+         * , 'mainboardNumber'
+         * , 'mainboardVersion'
+         * , 'mainboardProtocolVersion'],
+         * excelWidth:[ '4000', '4000', '4000', '4000', '4000'],
+         * excelDataType:['string', 'string', 'string', 'string', 'string'],
+         * excelId:'chargeInfo',
+         * excelNm:'ChargeInfoList'
+         * }
+         */
+
         log.info("########## downloadExcel ########## paramMap : " + paramMap);
 
         // Cookie setFileDown = new Cookie("fileDownYn", "N");
         // res.addCookie(setFileDown);
 
-        String paramExcelHeader = (String) paramMap.get("excelHeader");
         String paramExcelKey = (String) paramMap.get("excelKey");
         String paramExcelWidth = (String) paramMap.get("excelWidth");
         String pageId = (String) paramMap.get("pageId");
@@ -95,7 +108,7 @@ public class ExcelController {
 
         int girdWithChg = 35; // 엑셀 with계산시 곱할 수
 
-        String[] headerList = paramExcelHeader.toString().split(",");
+        // String[] headerList = paramExcelHeader.toString().split(",");
         String[] keyList = paramExcelKey.toString().split(",");
         String[] widthList = null;
 
@@ -168,13 +181,13 @@ public class ExcelController {
                 headerStyle.setWrapText(true);
             }
             // 1st 헤더를 그리자
-            for (int i = 0; i < headerList.length; i++) {
+            for (int i = 0; i < keyList.length; i++) {
                 Cell cell = null;
                 int clounmWidth = 200;
                 clounmWidth = Integer.parseInt(widthList[i]) * girdWithChg;
                 sheet.setColumnWidth(i, clounmWidth); // 컬럼 width 조정
                 cell = bodyRow.createCell(i);
-                cell.setCellValue(headerList[i]);
+                cell.setCellValue(keyList[i]);
                 cell.setCellStyle(headerStyle);
 
             }
@@ -213,7 +226,7 @@ public class ExcelController {
 
                 }
 
-            } else { // 이력정보관리 > 통신이력
+            } else { // 이력정보관리 > 통신이력 (대용량일때)
                 int totalCount = gridList.getRecords();
                 int pageCnt = 0;
                 int rowCnt = row;
@@ -292,8 +305,9 @@ public class ExcelController {
         }
     }
 
-    @RequestMapping(value = "/upload.json")
-    public @ResponseBody Map upload(@RequestParam("file") MultipartFile mf, @RequestParam Map<String, String> paramMap,
+    @PostMapping("/uploadExcel")
+    public ResponseEntity<Map<String, Object>> upload(@RequestParam("file") MultipartFile mf,
+            @RequestParam Map<String, String> paramMap,
             HttpServletResponse res) throws Exception {
         System.out.println("upload mf = " + mf);
         System.out.println("upload paramMap = " + paramMap);
@@ -1033,7 +1047,7 @@ public class ExcelController {
 
         workbook.close();
 
-        return rtnMap;
+        return null;
     }
 
     private void download(XSSFWorkbook workbook, HttpServletResponse res, HttpServletRequest req, String strFileName)
@@ -1051,7 +1065,7 @@ public class ExcelController {
         res.setHeader("Content-Transfer-Encoding", "binary;");
         res.setHeader("Pragma", "no-cache;");
         res.setHeader("Expires", "-1;");
-        res.setHeader("Set-Cookie", "fileDownload=true; path=/");
+        // res.setHeader("Set-Cookie", "fileDownload=true; path=/");
 
         ServletOutputStream out = res.getOutputStream();
         workbook.write(out);
