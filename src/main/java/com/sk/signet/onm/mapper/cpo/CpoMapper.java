@@ -24,10 +24,10 @@ public interface CpoMapper {
     // CPO 수정
     int updateCpo(Map param);
 
-    // 공통코드 수정 확인
-    Map<String, Object> applyUpdateCode(Map param);
+    // 마스킹제거요청
+    Map<String, Object> removeMasking(Map param);
 
-    //
+    // 마스킹제거요청 이력
     Map<String, Object> removeMaskingHist(Map param);
 
 }

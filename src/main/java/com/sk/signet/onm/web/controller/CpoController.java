@@ -56,8 +56,13 @@ public class CpoController {
     public ResponseEntity<Map<String, Object>> insertCpo(@RequestBody Map<String, Object> param) {
 
         int result = cpoService.insertCpo(param);
+
         Map<String, Object> data = new HashMap<>();
-        data.put("data", result);
+        if (result > 0) {
+            data.put("data", "success");
+        } else {
+            data.put("data", "fail");
+        }
 
         log.debug("data:" + data);
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
@@ -79,26 +84,21 @@ public class CpoController {
     @Operation(summary = "플랫폼 고객사(CPO) 수정 ", description = "플랫폼 고객사(CPO) 수정")
     public ResponseEntity<Map<String, Object>> updateCpo(@RequestBody Map<String, Object> param) {
 
-        Map<String, Object> apply = cpoService.applyUpdateCode(param);
+        int result = cpoService.updateCpo(param);
 
         Map<String, Object> data = new HashMap<>();
-        if (apply != null) {
 
-            int result = cpoService.updateCpo(param);
-            data.put("data", result);
-        } else {
-            data.put("data", "fail");
-        }
+        data.put("data", result);
 
         log.debug("data:" + data);
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
     }
 
-    @PostMapping("/apllyUpdateCode")
-    @Operation(summary = "공통코드 수정 확인 ", description = "공통코드 수정 확인")
-    public ResponseEntity<Map<String, Object>> apllyUpdateCode(@RequestBody Map<String, Object> param) {
+    @PostMapping("/removeMasking")
+    @Operation(summary = "마스킹제거 요청 ", description = "마스킹제거 요청")
+    public ResponseEntity<Map<String, Object>> removeMasking(@RequestBody Map<String, Object> param) {
 
-        Map<String, Object> result = cpoService.applyUpdateCode(param);
+        Map<String, Object> result = cpoService.removeMasking(param);
 
         Map<String, Object> data = new HashMap<>();
 

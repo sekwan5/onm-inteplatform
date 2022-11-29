@@ -4,60 +4,60 @@
 
 
 	<sql id="selectCpoListfrom">
-		FROM VINF_CP_INFO A
-		 INNER JOIN TINF_CPMODEL M
-			ON A.modelId = M.id
-  	     INNER JOIN TINF_CP_FW CPFW
-		    ON A.cpId = CPFW.cpId
-		   AND A.modelId = CPFW.modelId
-  	      LEFT OUTER JOIN TINF_CS CS
-  	        ON A.csId = CS.id  	        
-  	      LEFT OUTER JOIN TINF_CP_STATUS CPSTA
-		    ON A.modelId = CPSTA.modelId
-		   AND A.cpId = CPSTA.cpId
-		   AND A.csId = CPSTA.csId
-		  LEFT OUTER JOIN (
-        		SELECT  csId, cpId, modelId, max(ts) AS provisioningDate 
-        		  FROM  TINF_CP_CONNECTOR_STATUS 
-        		 GROUP  BY csId, cpId, modelId
-           ) CPCONNSTAUS
-        	ON A.modelId = CPCONNSTAUS.modelId
-		   AND A.cpId = CPCONNSTAUS.cpId
-		   AND A.csId = CPCONNSTAUS.csId
+		FROM ONM.CMN_M_CPO
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="custComStat != null and custComStat.length >0">
+				<foreach collection="map" item="value" open="(" close=")" separator=",">
+			 #{value}
+		 </foreach>
+			</if>
+			<if test="custComNm != null and custComNm !=''">
+        		AND cust_com_nm = #{custComNm}
+    		</if>
+			<if test="custComId != null and custComId !=''">
+        		AND cust_com_id = #{custComId}
+    		</if>
+			<if test="mgrNm != null and mgrNm !=''">
+        		AND mgr_nm = #{mgrNm}
+    		</if>
+		</trim>
 	</sql>
 
 	<!-- CPO 리스트 조회(그리드) -->
 	<select id="selectCpoList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
 		SELECT 
-			   A.cpId AS id
-     		 , A.serviceCompanyNm
-             , (SELECT areaNm FROM TCO_AREA WHERE areaCd = CS.zone GROUP BY areaCd) AS zone
-     		 , (SELECT areaDtlNm FROM TCO_AREA WHERE areaDtlCd = CS.city) AS city
-     		 , A.csNm
-     		 , CS.csId
-     		 , A.cpId2
-     		 , A.cpNm
-     		 , '' AS chargeMethod
-     		 , A.manufacturerNm
-             , M.chargeSpeedType
-     		 , CASE WHEN CPSTA.connectionYN = 'Y' THEN '연결' ELSE '미연결' END AS lastStatus
-     		 , A.modelNm
-     		 , A.firmwareVersion
-     		 , CPSTA.localListVersion				
-     		 , DATE_FORMAT(A.cpInstalledDate, '%Y-%m-%d') AS cpInstalledDate
-     		 , DATE_FORMAT(CPCONNSTAUS.provisioningDate, '%Y-%m-%d %H:%i:%s') AS 
-             statusChgDate
-     		 , DATE_FORMAT(CPFW.lastUpgradeDate, '%Y-%m-%d %H:%i:%s') AS fwLastUpgradeDate
-     		 , '상세조회' AS custAuthStatus
-     		 , '상세조회' AS commLog
-     		 , '상세조회' AS errorCode
-     		 , '상세조회' AS vocStatus
-			 , DATE_FORMAT(CPSTA.provisioningDate, '%Y-%m-%d %H:%i:%s') AS provisioningDate	     
-			 , A.modelId
-			 , A.chargeBoxSerialNumber
-			 , (SELECT typeNm FROM VINF_CP_CONNECTOR_INFO WHERE csId = CPSTA.csId AND cpId = CPSTA.cpId AND modelId = CPSTA.modelId LIMIT 1) AS connectorInfo
+			cpo_id
+			, cust_com_id
+			, cust_com_nm
+			, biz_num
+			, sect_cd
+			, ent_cd
+			, hd_zipcd
+			, hd_addr
+			, hd_addr_dtl
+			, cust_com_stat
+			, mgr_nm
+			, dept_nm
+			, dept_rank
+			, tel_num
+			, hp_num
+			, email
+			, zipcd
+			, addr
+			, addr_dtl
+			, signet_mgr_nm
+			, signet_dept_nm
+			, signet_dept_rank
+			, signet_tel_num
+			, signet_hp_num
+			, signet_email
+			, dboard_tpe_tp
+			, cont
+			, reg_id
+			, reg_dt
+			, mod_id
+			, mod_dt
 		<include refid="selectCpoListfrom" />
-		ORDER BY CPSTA.connectionYN = 'Y' DESC
 	</select>
 
 	<!-- 그리드 row 갯수 -->
@@ -68,54 +68,80 @@
 
 
 	<!-- 플랫폼 고객사(CPO) 등록 -->
-	<insert id="insertCpo" parameterType="map"></insert>
+	<insert id="insertCpo" parameterType="map">
+	INSERT INTO ONM.CMN_M_CPO
+	(
+	  cpo_id
+	, cust_com_nm
+	, cust_com_id
+	, biz_num
+	, sect_cd
+	, ent_cd
+	, hd_zipcd
+	, hd_addr
+	, hd_addr_dtl
+	, cust_com_stat
+	, mgr_nm
+	, dept_nm
+	, dept_rank
+	, tel_num
+	, hp_num
+	, email
+	, zipcd
+	, addr
+	, addr_dtl
+	, signet_mgr_nm
+	, signet_dept_nm
+	, signet_dept_rank
+	, signet_tel_num
+	, signet_hp_num
+	, signet_email
+	, dboard_tpe_tp
+	, cont
+	, reg_id
+	, reg_dt
+	, mod_id
+	, mod_dt
+	)
+VALUES
+	(
+	  ONM.FN_GET_DOMAIN_SEQ('CPO00')
+	, #{custComNm}
+	, #{custComId}
+	, #{bizNum}
+	, #{sectCd}
+	, #{entCd}
+	, #{hdZipcd}
+	, #{hdAddr}
+	, #{hdAddrDtl}
+	, 0
+	, #{mgrNm}
+	, #{deptNm}
+	, #{deptRank}
+	, #{telNum}
+	, #{hpNum}
+	, #{email}
+	, #{Zipcd}
+	, #{Addr}
+	, #{AddrDtl}
+	, #{signetMgrNm}
+	, #{signetDeptNm}
+	, #{signetDeptRank}
+	, #{signetTelNum}
+	, #{signetHpNum}
+	, #{signetEmail}
+	, 0
+	, #{cont}
+	, #{regId}
+	, now()
+	, #{regId}
+	, now()
+	)
+	</insert>
 
 	<!-- 개인정보 마스킹제거 요청 -->
-	<select id="removeMasking" parameterType="Map" resultType="com.sk.signet.onm.common.db.ResultMap">
-		SELECT A.companyId
-			, A.userId
-			, A.empNo
-			, A.userNm
-			, A.deptCd
-			, B.deptNm
-			, B.deptNmA
-			, B.parentDeptCd
-			, B.shipToNo
-			, A.email
-			, A.appleId
-			, A.authId, D.authNm
-			, IFNULL(A.ipSecurityYn , 'Y') AS userIpSecurityYn
-			, B.telNo deptTelNo
-			, B.addr deptAddr
-			, IFNULL(B.ipSecurityYn, 'Y') AS deptIpSecurityYn
-			, 'ko' AS languageCd
-			, '+00:00' AS timeDiff
-			, CASE WHEN IFNULL(A.gridRowCd, "") = "" THEN "10" ELSE A.gridRowCd END AS gridRowCd
-			, C.initUrl
-			, C.serviceAuthType AS authUnit
-			, C.name AS companyNm
-			, (SELECT LOWER(vendorId) FROM TCSP_SERVICE_COMPANY WHERE id=A.companyId) AS vendorId
-			, C.bid AS mnsBid
-            , C.bkey AS mnsBkey
-            , C.kepcoId AS kepcoBid
-            , C.kepcoKey AS kepcoBkey
-		FROM TCO_USER A
-			LEFT OUTER JOIN TCO_DEPT B
-				ON B.companyId = A.companyId
-				AND B.deptCd = A.deptCd
-			INNER JOIN TCSP_SERVICE_COMPANY C
-				ON A.companyId = C.id
-			LEFT OUTER JOIN TSM_AUTHORITY D
-				ON A.companyId = D.companyId
-                AND A.authId = D.authId
-		WHERE A.userId = #{userId}
-		<if test="userPassword != null and userPassword != ''">
-		   AND A.userPassword = CAST(PASSWORD(#{userPassword}) AS CHAR)
-		</if>
-		AND A.useYn = 'Y'
-	</select>
+	<select id="removeMasking" parameterType="Map" resultType="com.sk.signet.onm.common.db.ResultMap"></select>
 
-	<!--마스킹제거 추적이력생성 -->
 	<insert id="insertLoginHist" parameterType="com.sk.signet.onm.common.db.ResultMap"></insert>
 
 

@@ -71,16 +71,16 @@ public class CpoService {
         return result;
     }
 
-    // 공통코드 수정 확인
-    public Map<String, Object> applyUpdateCode(Map param) {
+    // 마스킹제거요청
+    public Map<String, Object> removeMasking(Map param) {
 
-        Map<String, Object> result = cpoMapper.applyUpdateCode(param);
+        Map<String, Object> result = cpoMapper.removeMasking(param);
 
         return result;
 
     }
 
-    //
+    // 마스킹제거요청 이력
     @Transactional
     public void removeMaskingHist(Map param) throws Exception {
 
