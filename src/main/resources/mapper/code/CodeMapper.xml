@@ -3,7 +3,73 @@
 <mapper namespace="com.sk.signet.onm.mapper.code.CodeMapper">
 
 
-	<sql id="applyUpdateCode"></sql>
+<select id="selectCommonMainCodeList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap"> 
+	SELECT 
+	    T1.ROWNUMBER,
+		T1.MAIN_CLASS_CD,
+		T1.CMN_CD_TP,
+		T1.MAIN_CLASS_NM,
+		T1.SEQ,
+		T1.DESCR,
+		T1.USE_YN,
+		T1.REG_ID,
+		T1.REG_DT,
+		T1.MOD_ID,
+		T1.MOD_DT
+	FROM (
+	      SELECT 
+	         @ROWNUM:=@ROWNUM+1 AS ROWNUMBER,
+	         T.*
+	      FROM CMN_M_CD T, ( SELECT @ROWNUM := 0) TEMP
+	      ORDER BY T.SEQ ASC
+	      )T1  
+	ORDER BY T1.ROWNUMBER  DESC   
+
+
+</select>
+<select id="selectCommonChildCodeList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
+
+	SELECT 
+	    T1.ROWNUMBER,
+		T1.MAIN_CLASS_CD,
+		T1.MDL_CLASS_CD,
+		T1.MDL_CLASS_NM,
+		T1.DESRC,
+		T1.RELAT_CD_1,
+		T1.RELAT_CD_2,
+		T1.RELAT_CD_3,
+		T1.USE_YN,
+		T1.REG_ID,
+		T1.REG_DT,
+		T1.MOD_ID,
+		T1.MOD_DT 
+	FROM (
+	      SELECT 
+	         @ROWNUM:=@ROWNUM+1 AS ROWNUMBER,
+	         T.*
+	      FROM CMN_M_CD_DTL T, ( SELECT @ROWNUM := 0) TEMP
+	      WHERE MAIN_CLASS_CD = #{mainClassCd}
+	      )T1  
+	ORDER BY T1.ROWNUMBER  DESC     
+
+</select>
+
+
+<select id="selectCommonMainCodeListCount" parameterType="map" resultType="int">
+
+	SELECT 
+		COUNT(MAIN_CLASS_CD)
+	FROM  CMN_M_CD
+
+</select>
+
+<select id="selectCommonChildCodeListCount" parameterType="map" resultType="int">
+
+	SELECT 
+		COUNT(MAIN_CLASS_CD)
+	FROM  CMN_M_CD_DTL
+
+</select>
 
 
 </mapper>

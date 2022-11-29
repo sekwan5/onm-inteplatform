@@ -30,8 +30,8 @@ public class CpoService {
         GridResultVO result = new GridResultVO();
 
         if (param.get("page") != null && param.get("rows") != null) {
-            result.setPage(Integer.parseInt((String) param.get("page")));
-            result.setRowPerPage(Integer.parseInt((String) param.get("rows")));
+            result.setPage(Integer.parseInt(String.valueOf(param.get("page")) ));
+            result.setRowPerPage(Integer.parseInt(String.valueOf( param.get("rows"))));
         }
 
         result.setRecords(cpoMapper.selectCpoListCount(param)); // 총row 갯수

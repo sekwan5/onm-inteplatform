@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sk.signet.onm.common.grid.GridResultVO;
 import com.sk.signet.onm.mapper.auth.LoginMapper;
+import com.sk.signet.onm.mapper.code.CodeMapper;
 import com.sk.signet.onm.mapper.cpo.CpoMapper;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,56 +20,39 @@ import lombok.extern.slf4j.Slf4j;
 public class CodeService {
 
     @Autowired
-    private CpoMapper cpoMapper;
+    private CodeMapper codeMapper;
 
-    @Autowired
-    private LoginMapper loginMapper;
-
-    //
-    public GridResultVO selectCpoList(Map<String, Object> param) {
+    
+    public GridResultVO selectCommonMainCodeList(Map<String, Object> param) {
 
         GridResultVO result = new GridResultVO();
 
         if (param.get("page") != null && param.get("rows") != null) {
-            result.setPage(Integer.parseInt((String) param.get("page")));
-            result.setRowPerPage(Integer.parseInt((String) param.get("rows")));
+            result.setPage(Integer.parseInt(String.valueOf( param.get("page"))));
+            result.setRowPerPage(Integer.parseInt(String.valueOf( param.get("rows"))));
         }
-
-        result.setRecords(cpoMapper.selectCpoListCount(param)); // 총row 갯수
-
+        result.setRecords(codeMapper.selectCommonMainCodeListCount(param)); // 총row 갯수
         /// 페이징 계산 set
         RowBounds rowBounds = new RowBounds((result.getPage() - 1) * result.getRowPerPage(), result.getRowPerPage());
-
-        result.setRows(cpoMapper.selectCpoList(param, rowBounds)); // 그리드에 뿌려질 data
-
-        return result;
-    }
-
-    // cpo등록
-    public int insertCpo(Map<String, Object> param) {
-
-        int result = cpoMapper.insertCpo(param);
-        log.debug("insert result : " + result);
+        result.setRows(codeMapper.selectCommonMainCodeList(param, rowBounds)); // 그리드에 뿌려질 data
 
         return result;
     }
+    
+    public GridResultVO selectCommonChildCodeList(Map<String, Object> param) {
 
-    // cpo 상세보기
-    public Map<String, Object> selectCpo(Map<String, Object> param) {
+        GridResultVO result = new GridResultVO();
 
-        Map<String, Object> result = cpoMapper.selectCpo(param);
-        log.debug("select result : " + result);
-
-        return result;
-    }
-
-    // CPO 수정
-    public int updateCpo(Map<String, Object> param) {
-
-        int result = cpoMapper.updateCpo(param);
-        log.debug("insert result : " + result);
+        if (param.get("page") != null && param.get("rows") != null) {
+            result.setPage(Integer.parseInt(String.valueOf( param.get("page"))));
+            result.setRowPerPage(Integer.parseInt(String.valueOf( param.get("rows"))));
+        }
+        result.setRecords(codeMapper.selectCommonChildCodeListCount(param)); // 총row 갯수
+        /// 페이징 계산 set
+        RowBounds rowBounds = new RowBounds((result.getPage() - 1) * result.getRowPerPage(), result.getRowPerPage());
+        result.setRows(codeMapper.selectCommonChildCodeList(param, rowBounds)); // 그리드에 뿌려질 data
 
         return result;
-    }
+    }    
 
 }
