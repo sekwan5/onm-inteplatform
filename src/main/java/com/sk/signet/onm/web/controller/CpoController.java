@@ -33,7 +33,7 @@ public class CpoController {
     @Operation(summary = "플랫폼 고객사(CPO) 관리(그리드)", description = "플랫폼 고객사(CPO) 리스트")
     public ResponseEntity<Map<String, Object>> selectCpoList(@RequestBody Map<String, Object> param) {
 
-        // System.out.println(param);
+        System.out.println(param + "===================================================================");
         /**
          * pagination 데이터
          * {
@@ -45,8 +45,6 @@ public class CpoController {
         GridResultVO result = cpoService.selectCpoList(param);
         Map<String, Object> data = new HashMap<>();
         data.put("data", result);
-
-        log.debug("data:" + data);
 
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
     }
@@ -103,7 +101,7 @@ public class CpoController {
         Map<String, Object> data = new HashMap<>();
 
         if (result != null) {
-
+            // 마스킹제거 요청 이력
             // cpoService.removeMaskingHist(result);
 
             data.put("data", "success");

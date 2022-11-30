@@ -2,11 +2,45 @@
 
 <mapper namespace="com.sk.signet.onm.mapper.cpo.CpoMapper">
 
+	<sql id="selectCpoDefaltColumn">
+		SELECT
+		  CPO_ID
+		, CUST_COM_ID
+		, CUST_COM_NM
+		, CONCAT(SUBSTR(BIZ_NUM,1,2),'-',SUBSTR(BIZ_NUM,3,3),'-',SUBSTR(BIZ_NUM,6,5) ) AS BIZ_NUM
+		, SECT_CD
+		, ENT_CD
+		, HD_ZIPCD
+		, HD_ADDR
+		, HD_ADDR_DTL
+		, CUST_COM_STAT
+		, MGR_NM
+		, DEPT_NM
+		, DEPT_RANK
+		, CONCAT(SUBSTR(TEL_NUM,1,3),'-',SUBSTR(TEL_NUM,4,4),'-',SUBSTR(TEL_NUM,8,4) ) AS TEL_NUM
+		, CONCAT(SUBSTR(HP_NUM,1,3),'-',SUBSTR(HP_NUM,4,4),'-',SUBSTR(HP_NUM,8,4) ) AS HP_NUM
+		, EMAIL
+		, ZIPCD
+		, ADDR
+		, ADDR_DTL
+		, SIGNET_MGR_NM
+		, SIGNET_DEPT_NM
+		, SIGNET_DEPT_RANK
+		, CONCAT(SUBSTR(SIGNET_TEL_NUM,1,3),'-',SUBSTR(SIGNET_TEL_NUM,4,4),'-',SUBSTR(SIGNET_TEL_NUM,8,4) ) AS SIGNET_TEL_NUM
+		, CONCAT(SUBSTR(SIGNET_HP_NUM,1,3),'-',SUBSTR(SIGNET_HP_NUM,4,4),'-',SUBSTR(SIGNET_HP_NUM,8,4) ) AS SIGNET_HP_NUM
+		, SIGNET_EMAIL
+		, DBOARD_TPE_TP
+		, CONT
+		, REG_ID
+		, REG_DT
+		, MOD_ID
+		, MOD_DT
+	</sql>
 
 	<sql id="selectCpoListfrom">
-		FROM ONM.CMN_M_CPO
+		FROM CMN_M_CPO
 		<trim prefix="WHERE" prefixOverrides="AND">
-			<if test="custComStat != null">
+			<if test="custComStat != null and custComStat.size() > 0">
 				CUST_COM_STAT IN
 				<foreach collection="custComStat" item="item" open="(" close=")" separator=",">
 			 #{item}
@@ -21,43 +55,15 @@
 			<if test="mgrNm != null and mgrNm !=''">
         		AND MGR_NM = #{mgrNm}
     		</if>
+			<if test="cpoId != null and cpoId !=''">
+        		AND CPO_ID = #{cpoId}
+    		</if>
 		</trim>
 	</sql>
 
 	<!-- CPO 리스트 조회(그리드) -->
 	<select id="selectCpoList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
-		SELECT 
-			  CPO_ID
-			, CUST_COM_ID
-			, CUST_COM_NM
-			, BIZ_NUM
-			, SECT_CD
-			, ENT_CD
-			, HD_ZIPCD
-			, HD_ADDR
-			, HD_ADDR_DTL
-			, CUST_COM_STAT
-			, MGR_NM
-			, DEPT_NM
-			, DEPT_RANK
-			, TEL_NUM
-			, HP_NUM
-			, EMAIL
-			, ZIPCD
-			, ADDR
-			, ADDR_DTL
-			, SIGNET_MGR_NM
-			, SIGNET_DEPT_NM
-			, SIGNET_DEPT_RANK
-			, SIGNET_TEL_NUM
-			, SIGNET_HP_NUM
-			, SIGNET_EMAIL
-			, DBOARD_TPE_TP
-			, CONT
-			, REG_ID
-			, REG_DT
-			, MOD_ID
-			, MOD_DT
+		<include refid="selectCpoDefaltColumn" />
 		<include refid="selectCpoListfrom" />
 	</select>
 
@@ -140,8 +146,11 @@ VALUES
 	)
 	</insert>
 
-	<!-- 개인정보 마스킹제거 요청 -->
-	<select id="removeMasking" parameterType="Map" resultType="com.sk.signet.onm.common.db.ResultMap"></select>
+	<!-- CPO 상세보기 -->
+	<select id="selectCpo" parameterType="Map" resultType="com.sk.signet.onm.common.db.ResultMap">
+		<include refid="selectCpoDefaltColumn" />
+		<include refid="selectCpoListfrom" />
+	</select>
 
 	<insert id="insertLoginHist" parameterType="com.sk.signet.onm.common.db.ResultMap"></insert>
 
