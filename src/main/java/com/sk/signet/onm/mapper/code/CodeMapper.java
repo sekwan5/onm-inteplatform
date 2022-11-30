@@ -17,10 +17,16 @@ public interface CodeMapper {
 	//공통코드관리(대분류)
 	List<Map<String, String>> selectCommonMainCodeList(Map param , RowBounds rowbounds);
 	int selectCommonMainCodeListCount(Map param);
+	int insertCommonMainCode(Map param);
+	int updateCommonMainCode(Map param);
+	
+	
 	//공통코드관리(소분류)
 	List<Map<String, String>> selectCommonChildCodeList(Map param , RowBounds rowbounds);
 	int selectCommonChildCodeListCount(Map param);
-
+	int insertCommonChildCode(Map param);
+	int updateCommonChildCode(Map param);
+	
 //	void insertLoginHist(Map param);
 //
 //	void updateLogoutHist(Map param);

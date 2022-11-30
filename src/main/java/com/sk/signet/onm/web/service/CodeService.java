@@ -54,5 +54,33 @@ public class CodeService {
 
         return result;
     }    
+    
+    @Transactional
+    public String insertCommonMainCode(Map<String, Object> param) {
+    	int result = 0;
+    	result = codeMapper.insertCommonMainCode(param);
+    	return (result == 0 ? "FALIL":"SUCCESS");
+    }
+    
+    @Transactional
+    public String insertCommonChildCode(Map<String, Object> param) {
+    	int result = 0;
+    	result = codeMapper.insertCommonChildCode(param);
+    	return (result == 0 ? "FALIL":"SUCCESS");
+    }
 
+    
+    @Transactional
+    public String updateCommonMainCode(Map<String, Object> param) {
+    	int result = 0;
+    	result = codeMapper.updateCommonMainCode(param);
+    	return (result == 0 ? "FALIL":"SUCCESS");
+    }
+    
+    @Transactional
+    public String updateCommonChildCode(Map<String, Object> param) {
+    	int result = 0;
+    	result = codeMapper.updateCommonChildCode(param);
+    	return (result == 0 ? "FALIL":"SUCCESS");
+    }
 }
