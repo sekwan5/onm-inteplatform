@@ -6,19 +6,20 @@
 	<sql id="selectCpoListfrom">
 		FROM ONM.CMN_M_CPO
 		<trim prefix="WHERE" prefixOverrides="AND">
-			<if test="custComStat != null and custComStat.length >0">
-				<foreach collection="map" item="value" open="(" close=")" separator=",">
-			 #{value}
+			<if test="custComStat != null">
+				CUST_COM_STAT IN
+				<foreach collection="custComStat" item="item" open="(" close=")" separator=",">
+			 #{item}
 		 </foreach>
 			</if>
 			<if test="custComNm != null and custComNm !=''">
-        		AND cust_com_nm = #{custComNm}
+        		AND CUST_COM_NM = #{custComNm}
     		</if>
 			<if test="custComId != null and custComId !=''">
-        		AND cust_com_id = #{custComId}
+        		AND CUST_COM_ID = #{custComId}
     		</if>
 			<if test="mgrNm != null and mgrNm !=''">
-        		AND mgr_nm = #{mgrNm}
+        		AND MGR_NM = #{mgrNm}
     		</if>
 		</trim>
 	</sql>
@@ -26,37 +27,37 @@
 	<!-- CPO 리스트 조회(그리드) -->
 	<select id="selectCpoList" parameterType="map" resultType="com.sk.signet.onm.common.db.ResultMap">
 		SELECT 
-			cpo_id
-			, cust_com_id
-			, cust_com_nm
-			, biz_num
-			, sect_cd
-			, ent_cd
-			, hd_zipcd
-			, hd_addr
-			, hd_addr_dtl
-			, cust_com_stat
-			, mgr_nm
-			, dept_nm
-			, dept_rank
-			, tel_num
-			, hp_num
-			, email
-			, zipcd
-			, addr
-			, addr_dtl
-			, signet_mgr_nm
-			, signet_dept_nm
-			, signet_dept_rank
-			, signet_tel_num
-			, signet_hp_num
-			, signet_email
-			, dboard_tpe_tp
-			, cont
-			, reg_id
-			, reg_dt
-			, mod_id
-			, mod_dt
+			  CPO_ID
+			, CUST_COM_ID
+			, CUST_COM_NM
+			, BIZ_NUM
+			, SECT_CD
+			, ENT_CD
+			, HD_ZIPCD
+			, HD_ADDR
+			, HD_ADDR_DTL
+			, CUST_COM_STAT
+			, MGR_NM
+			, DEPT_NM
+			, DEPT_RANK
+			, TEL_NUM
+			, HP_NUM
+			, EMAIL
+			, ZIPCD
+			, ADDR
+			, ADDR_DTL
+			, SIGNET_MGR_NM
+			, SIGNET_DEPT_NM
+			, SIGNET_DEPT_RANK
+			, SIGNET_TEL_NUM
+			, SIGNET_HP_NUM
+			, SIGNET_EMAIL
+			, DBOARD_TPE_TP
+			, CONT
+			, REG_ID
+			, REG_DT
+			, MOD_ID
+			, MOD_DT
 		<include refid="selectCpoListfrom" />
 	</select>
 
@@ -71,37 +72,37 @@
 	<insert id="insertCpo" parameterType="map">
 	INSERT INTO ONM.CMN_M_CPO
 	(
-	  cpo_id
-	, cust_com_nm
-	, cust_com_id
-	, biz_num
-	, sect_cd
-	, ent_cd
-	, hd_zipcd
-	, hd_addr
-	, hd_addr_dtl
-	, cust_com_stat
-	, mgr_nm
-	, dept_nm
-	, dept_rank
-	, tel_num
-	, hp_num
-	, email
-	, zipcd
-	, addr
-	, addr_dtl
-	, signet_mgr_nm
-	, signet_dept_nm
-	, signet_dept_rank
-	, signet_tel_num
-	, signet_hp_num
-	, signet_email
-	, dboard_tpe_tp
-	, cont
-	, reg_id
-	, reg_dt
-	, mod_id
-	, mod_dt
+		  CPO_ID
+		, CUST_COM_NM
+		, CUST_COM_ID
+		, BIZ_NUM
+		, SECT_CD
+		, ENT_CD
+		, HD_ZIPCD
+		, HD_ADDR
+		, HD_ADDR_DTL
+		, CUST_COM_STAT
+		, MGR_NM
+		, DEPT_NM
+		, DEPT_RANK
+		, TEL_NUM
+		, HP_NUM
+		, EMAIL
+		, ZIPCD
+		, ADDR
+		, ADDR_DTL
+		, SIGNET_MGR_NM
+		, SIGNET_DEPT_NM
+		, SIGNET_DEPT_RANK
+		, SIGNET_TEL_NUM
+		, SIGNET_HP_NUM
+		, SIGNET_EMAIL
+		, DBOARD_TPE_TP
+		, CONT
+		, REG_ID
+		, REG_DT
+		, MOD_ID
+		, MOD_DT
 	)
 VALUES
 	(

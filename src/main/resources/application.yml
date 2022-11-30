@@ -3,26 +3,25 @@ spring:
     name: onm-web
   profiles:
     active: local
-  banner: 
+  banner:
     location: "classpath:app-banner.txt"
-  datasource: 
+  datasource:
     hikari:
       driver-class-name: org.mariadb.jdbc.Driver
-      jdbc-url: "jdbc:mariadb://210.116.112.171:33306/signetCpos?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true"  # prod
-#      jdbc-url: "jdbc:mariadb://210.116.112.170:3306/signetCpos?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true"   # dev
-      username: cpos
-      password: cpos!@34
+      jdbc-url: "jdbc:mariadb://210.116.112.171:33306/signetCpos?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true" # prod
+      #      jdbc-url: "jdbc:mariadb://210.116.112.170:3306/signetCpos?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true"   # dev
+      username: cpos_dev
+      password: signet12#$
       connection-timeout: 5000
       validation-timeout: 1000
       maximum-pool-size: 10
-      
 
-mybatis: 
+mybatis:
   mapper-locations: /mapper/**/*.xml
   type-aliases-package: com.sk.signet.onm.common.db.ResultMap
-    
+
 springdoc:
-  version: '@project.version@'
+  version: "@project.version@"
   api-docs:
     path: /v3/api-docs
   default-consumes-media-type: application/json
@@ -36,14 +35,13 @@ springdoc:
     doc-expansion: none
 
 openapi:
-  title : "SK Signet O&M API Docs"
+  title: "SK Signet O&M API Docs"
   description: "Spring Boot를 이용한 O&M API Docs 입니다."
   termsOfService: "http://swagger.io/terms/"
   contact:
     name: "Sehwan.HEO"
     url: "https://signet.sk.com/"
     email: "admin@sk.com"
-  license: 
+  license:
     name: "Apache License Version 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0"
-
