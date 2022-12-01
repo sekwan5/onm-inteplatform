@@ -7,7 +7,7 @@
 		  CPO_ID
 		, CUST_COM_ID
 		, CUST_COM_NM
-		, CONCAT(SUBSTR(BIZ_NUM,1,2),'-',SUBSTR(BIZ_NUM,3,3),'-',SUBSTR(BIZ_NUM,6,5) ) AS BIZ_NUM
+		, BIZ_NUM
 		, SECT_CD
 		, ENT_CD
 		, HD_ZIPCD
@@ -17,8 +17,8 @@
 		, MGR_NM
 		, DEPT_NM
 		, DEPT_RANK
-		, CONCAT(SUBSTR(TEL_NUM,1,3),'-',SUBSTR(TEL_NUM,4,4),'-',SUBSTR(TEL_NUM,8,4) ) AS TEL_NUM
-		, CONCAT(SUBSTR(HP_NUM,1,3),'-',SUBSTR(HP_NUM,4,4),'-',SUBSTR(HP_NUM,8,4) ) AS HP_NUM
+		, TEL_NUM
+		, HP_NUM
 		, EMAIL
 		, ZIPCD
 		, ADDR
@@ -26,8 +26,8 @@
 		, SIGNET_MGR_NM
 		, SIGNET_DEPT_NM
 		, SIGNET_DEPT_RANK
-		, CONCAT(SUBSTR(SIGNET_TEL_NUM,1,3),'-',SUBSTR(SIGNET_TEL_NUM,4,4),'-',SUBSTR(SIGNET_TEL_NUM,8,4) ) AS SIGNET_TEL_NUM
-		, CONCAT(SUBSTR(SIGNET_HP_NUM,1,3),'-',SUBSTR(SIGNET_HP_NUM,4,4),'-',SUBSTR(SIGNET_HP_NUM,8,4) ) AS SIGNET_HP_NUM
+		, SIGNET_TEL_NUM
+		, SIGNET_HP_NUM
 		, SIGNET_EMAIL
 		, DBOARD_TPE_TP
 		, CONT
@@ -152,7 +152,41 @@ VALUES
 		<include refid="selectCpoListfrom" />
 	</select>
 
-	<insert id="insertLoginHist" parameterType="com.sk.signet.onm.common.db.ResultMap"></insert>
+	<update id="updateCpo" parameterType="Map">
+		UPDATE CMN_M_CPO
+			SET 
+			, CUST_COM_NM=#{custComNm}
+			, CUST_COM_ID=#{custComId}
+			, BIZ_NUM=#{bizNum}
+			, SECT_CD=#{sectCd}
+			, ENT_CD=#{entCd}
+			, HD_ZIPCD=#{hdZipcd}
+			, HD_ADDR=#{hdAddr}
+			, HD_ADDR_DTL=#{hdAddrDtl}
+			, CUST_COM_STAT=#{custComStat}
+			, MGR_NM=#{mgrNm}
+			, DEPT_NM=#{deptNm}
+			, DEPT_RANK=#{deptRank}
+			, TEL_NUM=#{telNum}
+			, HP_NUM=#{hpNum}
+			, EMAIL=#{email}
+			, ZIPCD=#{Zipcd}
+			, ADDR=#{Addr}
+			, ADDR_DTL=#{AddrDtl}
+			, SIGNET_MGR_NM=#{signetMgrNm}
+			, SIGNET_DEPT_NM=#{signetDeptNm}
+			, SIGNET_DEPT_RANK=#{signetDeptRank}
+			, SIGNET_TEL_NUM=#{signetTelNum}
+			, SIGNET_HP_NUM=#{signetHpNum}
+			, SIGNET_EMAIL=#{signetEmail}
+			, DBOARD_TPE_TP=#{dboardTpeTp}
+			, CONT=#{cont}
+			, MOD_ID=#{modId}
+			, MOD_DT=NOW()
+		WHERE 
+			CPO_ID=#{cpoId};
+
+	</update>
 
 
 </mapper>

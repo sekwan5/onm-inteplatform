@@ -85,8 +85,11 @@ public class CpoController {
         int result = cpoService.updateCpo(param);
 
         Map<String, Object> data = new HashMap<>();
-
-        data.put("data", result);
+        if (result > 0) {
+            data.put("data", "success");
+        } else {
+            data.put("data", "fail");
+        }
 
         log.debug("data:" + data);
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);

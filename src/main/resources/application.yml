@@ -8,7 +8,7 @@ spring:
   datasource:
     hikari:
       driver-class-name: org.mariadb.jdbc.Driver
-      jdbc-url: "jdbc:mariadb://210.116.112.171:33306/signetCpos?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true" # prod
+      jdbc-url: "jdbc:mariadb://210.116.112.171:33306/ONM?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true" # prod
       #      jdbc-url: "jdbc:mariadb://210.116.112.170:3306/signetCpos?useSSL=false&amp;serverTimezone=UTC&amp;autoReconnection=true"   # dev
       username: cpos_dev
       password: signet12#$
