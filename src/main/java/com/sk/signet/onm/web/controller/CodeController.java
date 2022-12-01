@@ -93,5 +93,32 @@ public class CodeController {
 
         return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
     }        
+    
+    
+    @PostMapping("/updateCommonMainCode")
+    @Operation(summary = "공통코드 관리(그리드)", description = "공통코드 관리(대분류) 수정")
+    public ResponseEntity<Map<String, Object>> updateCommonMainCode(@RequestBody Map<String, Object> param) {
+        String result = codeService.updateCommonMainCode(param);
+        Map<String, Object> data = new HashMap<>();
+        data.put("data", result);
+        log.debug("data:" + data);
+
+        return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
+    }     
+    
+    @PostMapping("/updateCommonChildCode")
+    @Operation(summary = "공통코드 관리(그리드)", description = "공통코드 관리(소분류) 수정")
+    public ResponseEntity<Map<String, Object>> updateCommonChildCode(@RequestBody Map<String, Object> param) {
+        String result = codeService.updateCommonChildCode(param);
+        Map<String, Object> data = new HashMap<>();
+        data.put("data", result);
+        log.debug("data:" + data);
+
+        return new ResponseEntity<Map<String, Object>>(data, HttpStatus.OK);
+    }      
+    
+    
+    
+     
 
 }

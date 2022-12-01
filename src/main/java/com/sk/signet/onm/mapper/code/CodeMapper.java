@@ -20,12 +20,17 @@ public interface CodeMapper {
 	int insertCommonMainCode(Map param);
 	int updateCommonMainCode(Map param);
 	
+	//대분류 코드가 변경 되었을때 하위 code들의 mainCode를 변경 
+	int othUpdateCommonChildCode(Map param);
 	
 	//공통코드관리(소분류)
 	List<Map<String, String>> selectCommonChildCodeList(Map param , RowBounds rowbounds);
 	int selectCommonChildCodeListCount(Map param);
 	int insertCommonChildCode(Map param);
 	int updateCommonChildCode(Map param);
+	
+	
+	
 	
 //	void insertLoginHist(Map param);
 //

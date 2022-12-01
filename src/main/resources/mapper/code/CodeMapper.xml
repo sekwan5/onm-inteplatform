@@ -154,12 +154,12 @@
 	  <!-- cmn_cd_tp=0, -->
 	  <!-- seq=NULL, -->
 	  MAIN_CLASS_NM = #{mainClassNm}, 
-	  MAIN_CLASS_CD = #{mainClassCd},
+	<!--   MAIN_CLASS_CD = #{mainClassCd}, -->
 	  DESCR         = #{descr},
 	  USE_YN        = #{useYn},
 	  MOD_ID        = #{modId},
 	  MOD_DT        = NOW()
-	WHERE MAIN_CLASS_CD= #{beforeMainClassCd}
+	WHERE MAIN_CLASS_CD= #{mainClassCd}
 
 </update>
 
@@ -167,6 +167,7 @@
 	UPDATE CMN_M_CD_DTL
 	 SET 
 		 MDL_CLASS_NM = #{mdlClassNm},
+		 MDL_CLASS_CD  = #{mdlClassCd},
 		 DESRC        = #{desrc}, 
 		 RELAT_CD_1   = #{relatCd1},
 		 RELAT_CD_2   = #{relatCd2}, 
@@ -175,7 +176,14 @@
 		 MOD_ID       = #{modId},
 		 MOD_DT       = NOW()
      WHERE MAIN_CLASS_CD = #{mainClassCd} 
-     AND   MDL_CLASS_CD  = #{mdlClassCd}
+     AND   MDL_CLASS_CD  = #{beforeMdlClassCd}
+</update>
+
+
+<update id="othUpdateCommonChildCode" parameterType="map">
+	UPDATE CMN_M_CD_DTL
+	 SET  MAIN_CLASS_CD = #{mainClassCd} 
+    WHERE MAIN_CLASS_CD = #{beforeMainClassCd} 
 </update>
 
 </mapper>

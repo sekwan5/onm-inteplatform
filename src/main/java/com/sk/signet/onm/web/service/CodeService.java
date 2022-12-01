@@ -73,7 +73,15 @@ public class CodeService {
     @Transactional
     public String updateCommonMainCode(Map<String, Object> param) {
     	int result = 0;
+
     	result = codeMapper.updateCommonMainCode(param);
+
+    	/* 2022.12.01 -> 기획에 의논후 결정
+    	if(result > 0) {
+        	//하위코드의 mainCode를 변경
+    		result = codeMapper.othUpdateCommonChildCode(param);
+    	}*/
+    	   	
     	return (result == 0 ? "FALIL":"SUCCESS");
     }
     
